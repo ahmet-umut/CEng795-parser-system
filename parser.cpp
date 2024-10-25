@@ -50,8 +50,6 @@ void parser::Scene::loadFromXml(const std::string &filepath)
 	}
 	stream >> shadow_ray_epsilon;
 
-	std::cout << "ShadowRayEpsilon: " << shadow_ray_epsilon << std::endl;
-
 	// Get MaxRecursionDepth
 	element = root->FirstChildElement("MaxRecursionDepth");
 	if (element)
@@ -100,8 +98,6 @@ void parser::Scene::loadFromXml(const std::string &filepath)
 		element = element->NextSiblingElement("Camera");
 	}
 
-	std::cout << "Loaded " << cameras.size() << " cameras." << std::endl;
-
 	// Get Lights
 	element = root->FirstChildElement("Lights");
 	auto child = element->FirstChildElement("AmbientLight");
@@ -122,9 +118,6 @@ void parser::Scene::loadFromXml(const std::string &filepath)
 		point_lights.push_back(point_light);
 		element = element->NextSiblingElement("PointLight");
 	}
-
-	if (_debug)
-		std::cout << "Loaded " << cameras.size() << " cameras and " << point_lights.size() << " lights." << std::endl;
 
 	// Get Materials
 	element = root->FirstChildElement("Materials");
@@ -193,13 +186,11 @@ void parser::Scene::loadFromXml(const std::string &filepath)
 		materials.push_back(material);
 		element = element->NextSiblingElement("Material");
 	}
-	if (_debug)
-		std::cout << "Loaded " << materials.size() << " materials." << std::endl;
 
 	// Get VertexData
 	element = root->FirstChildElement("VertexData");
 	stream << element->GetText() << std::endl;
-	Vector vertex;
+	parser::Vec3f vertex;
 	while (!(stream >> vertex.x).eof())
 	{
 		stream >> vertex.y >> vertex.z;
@@ -241,9 +232,6 @@ void parser::Scene::loadFromXml(const std::string &filepath)
 	}
 	stream.clear();
 
-	if (_debug)
-		std::cout << "Loaded " << vertex_data.size() << " vertices and " << meshes.size() << " meshes." << std::endl;
-
 	// Get Triangles
 	element = root->FirstChildElement("Objects");
 	element = element->FirstChildElement("Triangle");
@@ -283,7 +271,4 @@ void parser::Scene::loadFromXml(const std::string &filepath)
 		spheres.push_back(sphere);
 		element = element->NextSiblingElement("Sphere");
 	}
-
-	if (_debug)
-		std::cout << "Loaded " << triangles.size() << " triangles and " << spheres.size() << " spheres." << std::endl;
 }

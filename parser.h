@@ -1,8 +1,4 @@
 #pragma once
-#include "Vector.hh"
-
-#ifndef __HW1__PARSER__
-#define __HW1__PARSER__
 
 #include <string>
 #include <vector>
@@ -14,14 +10,18 @@ namespace parser
     struct Vec3f
     {
         float x, y, z;
+        operator bool()
+        {
+            return x || y || z;
+        }
     };
 
     struct Vec3i
     {
         int x, y, z;
-        operator Vector()
+        operator Vec3f()
         {
-            Vector vector = {x, y, z};
+            Vec3f vector = {x, y, z};
             return vector;
         }
     };
@@ -33,9 +33,9 @@ namespace parser
 
     struct Camera
     {
-        Vector position;
-        Vector gaze;
-        Vector up;
+        Vec3f position;
+        Vec3f gaze;
+        Vec3f up;
         Vec4f near_plane;
         float near_distance;
         int image_width, image_height;
@@ -44,18 +44,18 @@ namespace parser
 
     struct PointLight
     {
-        Vector position;
-        Vector intensity;
+        Vec3f position;
+        Vec3f intensity;
     };
 
     struct Material
     {
         bool is_mirror, is_dielectric;
-        Vector ambient;
-        Vector diffuse;
-        Vector specular;
-        Vector mirror;
-        Vector AbsorptionCoefficient;
+        Vec3f ambient;
+        Vec3f diffuse;
+        Vec3f specular;
+        Vec3f mirror;
+        Vec3f AbsorptionCoefficient;
         float phong_exponent, refraction_index;
     };
 
@@ -98,10 +98,10 @@ namespace parser
         float shadow_ray_epsilon;
         int max_recursion_depth;
         std::vector<Camera> cameras;
-        Vector ambient_light;
+        Vec3f ambient_light;
         std::vector<PointLight> point_lights;
         std::vector<Material> materials;
-        std::vector<Vector> vertex_data;
+        std::vector<Vec3f> vertex_data;
         std::vector<Mesh> meshes;
         std::vector<Triangle> triangles;
         std::vector<Sphere> spheres;
@@ -112,5 +112,3 @@ namespace parser
         void loadFromXml(const std::string &filepath);
     };
 }
-
-#endif
